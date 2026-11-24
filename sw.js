@@ -1,5 +1,5 @@
 /* 업무 현황판 — offline shell */
-const CACHE = "hw-board-v3";
+const CACHE = "hw-board-v4";
 const SHELL = ["./", "./index.html", "./manifest.json", "./icons/icon-180.png", "./icons/icon-192.png", "./icons/icon-512.png"];
 
 self.addEventListener("install", e => {
@@ -18,6 +18,18 @@ self.addEventListener("fetch", e => {
   if (req.method !== "GET") return;
   const url = new URL(req.url);
   if (url.origin !== location.origin) return;
+
+  // HTML navigations: network first, fall back to cache (keeps content fresh)
+  if (req.mode === "navigate" || url.pathname.endsWith("/index.html")) {
+    e.respondWith(
+      fetch(req).then(res => {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(req, copy));
+        return res;
+      }).catch(() => caches.match(req).then(r => r || caches.match("./index.html")))
+    );
+    return;
+  }
 
   // data.json: network first, fall back to cache
   if (url.pathname.endsWith("/data.json")) {
