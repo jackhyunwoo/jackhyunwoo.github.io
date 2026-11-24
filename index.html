@@ -797,6 +797,10 @@ function initSW() {
 }
 
 (async function boot() {
+  try {
+    const p = new URLSearchParams(location.search).get("tab");
+    if (p && CATS.some(c => c.key === p)) { state.tab = p; localStorage.setItem(LS_TAB, p); }
+  } catch (e) {}
   initTheme(); initSearch(); initNotes(); initScroll(); initSW();
   document.getElementById("refreshBtn").addEventListener("click", () => loadData(true));
   await loadData(false);
