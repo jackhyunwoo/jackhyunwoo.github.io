@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<title>업무 현황판</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0" />
+<meta name="description" content="최현우님의 업무·생활 현황판" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="업무 현황판" />
+<meta name="theme-color" content="#F2F4F6" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#101214" media="(prefers-color-scheme: dark)" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="manifest" href="./manifest.json" />
+<link rel="apple-touch-icon" href="./icons/icon-180.png" />
+<link rel="icon" type="image/svg+xml" href="./icons/favicon.svg" />
+<style>
+  :root {
+    --bg: #F2F4F6;
+    --bg-grad: radial-gradient(120% 60% at 50% -10%, #E7EEFB 0%, rgba(242,244,246,0) 60%);
+    --card: #FFFFFF;
+    --card-2: #F7F8FA;
+    --text: #191F28;
+    --sub: #6B7684;
+    --faint: #9AA4B2;
+    --line: #E8EBEE;
+    --line-strong: #DDE1E6;
+    --blue: #3182F6;
+    --blue-soft: #E8F2FF;
+    --green: #00A87E;
+    --green-soft: #E4F8F2;
+    --amber: #E8830C;
+    --amber-soft: #FFF3E0;
+    --red: #F04452;
+    --red-soft: #FFEBEC;
+    --purple: #7B61FF;
+    --purple-soft: #F0EDFF;
+    --teal: #0FA3A3;
+    --teal-soft: #E2F7F7;
+    --gold: #B8860B;
+    --gold-soft: #FDF3D8;
+    --shadow: 0 1px 2px rgba(23, 31, 40, .04), 0 6px 20px rgba(23, 31, 40, .05);
+    --shadow-lift: 0 2px 6px rgba(23, 31, 40, .05), 0 14px 34px rgba(23, 31, 40, .08);
+    --radius: 20px;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html[data-theme="dark"] {
+    --bg: #101214;
+    --bg-grad: radial-gradient(120% 60% at 50% -10%, #1B2637 0%, rgba(16,18,20,0) 60%);
+    --card: #1B1D21;
+    --card-2: #23262B;
+    --text: #F2F4F6;
+    --sub: #9BA6B4;
+    --faint: #6E7885;
+    --line: #2A2E34;
+    --line-strong: #343941;
+    --blue: #5B9BFF;
+    --blue-soft: #1B2B45;
+    --green: #2ED3A7;
+    --green-soft: #14322B;
+    --amber: #FFB05A;
+    --amber-soft: #3A2A16;
+    --red: #FF6B78;
+    --red-soft: #3B1F23;
+    --purple: #9E8CFF;
+    --purple-soft: #262042;
+    --teal: #45C6C6;
+    --teal-soft: #123030;
+    --gold: #E4B84C;
+    --gold-soft: #362D14;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.28);
+    --shadow-lift: 0 2px 8px rgba(0,0,0,.35), 0 16px 40px rgba(0,0,0,.4);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    background-image: var(--bg-grad);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .25s ease, color .25s ease;
+    padding-bottom: calc(40px + var(--safe-bottom));
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+  /* ── header ─────────────────────────────── */
+  header.top {
+    position: sticky; top: 0; z-index: 50;
+    padding: calc(10px + var(--safe-top)) 0 10px;
+    background: var(--bg);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    -webkit-backdrop-filter: saturate(180%) blur(18px);
+    backdrop-filter: saturate(180%) blur(18px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s ease;
+  }
+  header.top.scrolled { border-bottom-color: var(--line); }
+  .top-row { display: flex; align-items: center; gap: 10px; }
+  .brand { flex: 1; min-width: 0; }
+  .brand h1 { margin: 0; font-size: 19px; font-weight: 800; letter-spacing: -0.03em; }
+  .brand .sub { font-size: 11.5px; color: var(--faint); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .icon-btn {
+    appearance: none; border: none; background: var(--card); color: var(--sub);
+    width: 38px; height: 38px; border-radius: 12px; font-size: 17px; line-height: 1;
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow); cursor: pointer; flex: none;
+    transition: transform .12s ease, background-color .2s ease;
+  }
+  .icon-btn:active { transform: scale(.94); }
+  /* ── hero ───────────────────────────────── */
+  .hero {
+    margin-top: 14px; padding: 20px;
+    border-radius: 26px;
+    background: linear-gradient(150deg, #2B6BE4 0%, #3182F6 45%, #54A0FF 100%);
+    color: #fff; box-shadow: 0 12px 30px rgba(49, 130, 246, .28);
+    position: relative; overflow: hidden;
+  }
+  html[data-theme="dark"] .hero {
+    background: linear-gradient(150deg, #1E3E7A 0%, #2A5BC0 50%, #3B78D8 100%);
+    box-shadow: 0 12px 30px rgba(0,0,0,.45);
+  }
+  .hero::after {
+    content: ""; position: absolute; width: 220px; height: 220px; border-radius: 50%;
+    right: -70px; top: -110px; background: rgba(255,255,255,.14);
+  }
+  .hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; position: relative; z-index: 1; }
+  .hero .label { font-size: 12px; font-weight: 600; opacity: .82; letter-spacing: 0; }
+  .dday { display: flex; align-items: baseline; gap: 6px; margin-top: 2px; }
+  .dday b { font-size: 40px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; }
+  .dday span { font-size: 13px; opacity: .85; }
+  .hero .right { text-align: right; font-size: 11.5px; opacity: .85; line-height: 1.55; }
+  .hero .right b { font-size: 15px; font-weight: 700; opacity: 1; }
+  .hero-bars { margin-top: 16px; position: relative; z-index: 1; display: grid; gap: 12px; }
+  .hbar-head { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; opacity: .92; margin-bottom: 5px; }
+  .hbar-head b { font-size: 13.5px; font-weight: 700; }
+  .hbar { height: 7px; border-radius: 99px; background: rgba(255,255,255,.25); overflow: hidden; }
+  .hbar > i { display: block; height: 100%; border-radius: 99px; background: #fff; transition: width .8s cubic-bezier(.22,.7,.2,1); }
+  .hero-note { margin-top: 12px; font-size: 11.5px; opacity: .8; position: relative; z-index: 1; }
+  /* ── stats ──────────────────────────────── */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+  .stat {
+    background: var(--card); border-radius: 16px; padding: 12px 8px 11px; text-align: center;
+    box-shadow: var(--shadow); border: 1px solid var(--line);
+    cursor: pointer; transition: transform .12s ease;
+  }
+  .stat:active { transform: scale(.97); }
+  .stat .n { font-size: 21px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
+  .stat .t { font-size: 10.5px; color: var(--sub); margin-top: 1px; white-space: nowrap; }
+  .stat .p { font-size: 9.5px; color: var(--faint); margin-top: 1px; }
+  .stat.s-progress .n { color: var(--blue); }
+  .stat.s-decision .n { color: var(--amber); }
+  .stat.s-done .n { color: var(--green); }
+  .stat.s-upcoming .n { color: var(--purple); }
+  /* ── search ─────────────────────────────── */
+  .searchbar { position: relative; margin-top: 14px; }
+  .searchbar input {
+    width: 100%; appearance: none; border: 1px solid var(--line); background: var(--card);
+    color: var(--text); border-radius: 14px; padding: 12px 40px 12px 40px; font-size: 14.5px;
+    box-shadow: var(--shadow); outline: none; font-family: inherit;
+    transition: border-color .2s ease;
+  }
+  .searchbar input::placeholder { color: var(--faint); }
+  .searchbar input:focus { border-color: var(--blue); }
+  .searchbar .ic { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--faint); }
+  .searchbar .clear {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    border: none; background: var(--card-2); color: var(--sub); width: 26px; height: 26px;
+    border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 13px; cursor: pointer;
+  }
+  .searchbar.has-q .clear { display: inline-flex; }
+  /* ── tabs ───────────────────────────────── */
+  .tabs {
+    display: flex; gap: 7px; overflow-x: auto; padding: 12px 0 4px; margin: 0 -16px;
+    padding-left: 16px; padding-right: 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex: none; border: 1px solid var(--line); background: var(--card); color: var(--sub);
+    padding: 8px 13px; border-radius: 99px; font-size: 13px; font-weight: 600; white-space: nowrap;
+    cursor: pointer; transition: all .18s ease; display: inline-flex; align-items: center; gap: 5px;
+    font-family: inherit;
+  }
+  .tab:active { transform: scale(.96); }
+  .tab.on { background: var(--text); color: var(--bg); border-color: var(--text); }
+  html[data-theme="dark"] .tab.on { background: #F2F4F6; color: #101214; border-color: #F2F4F6; }
+  .tab .c { font-size: 11px; opacity: .6; font-variant-numeric: tabular-nums; }
+  /* ── sections / cards ───────────────────── */
+  section.block { margin-top: 18px; }
+  .sec-head { display: flex; align-items: baseline; justify-content: space-between; margin: 0 4px 8px; }
+  .sec-head h2 { margin: 0; font-size: 14px; font-weight: 700; letter-spacing: -0.02em; }
+  .sec-head .aside { font-size: 11.5px; color: var(--faint); }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 16px; box-shadow: var(--shadow); margin-bottom: 10px;
+  }
+  .card.flat { box-shadow: none; }
+  /* item card */
+  .item { display: block; }
+  .item.done { opacity: .62; }
+  .item-row { display: flex; gap: 11px; align-items: flex-start; }
+  .item .ico {
+    flex: none; width: 34px; height: 34px; border-radius: 11px; background: var(--card-2);
+    display: flex; align-items: center; justify-content: center; font-size: 16px; margin-top: 1px;
+  }
+  .item .body { flex: 1; min-width: 0; }
+  .item .title-row { display: flex; align-items: flex-start; gap: 6px; }
+  .item h3 { margin: 0; font-size: 14.5px; font-weight: 650; letter-spacing: -0.02em; line-height: 1.4; flex: 1; }
+  .item.done h3 { text-decoration: line-through; text-decoration-thickness: 1px; text-decoration-color: var(--faint); }
+  .item .note { margin: 5px 0 0; font-size: 12.5px; color: var(--sub); line-height: 1.55; }
+  .tag {
+    display: inline-flex; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 700;
+    padding: 3px 7px; border-radius: 7px; white-space: nowrap; letter-spacing: -0.01em;
+  }
+  .tag.blue { background: var(--blue-soft); color: var(--blue); }
+  .tag.amber { background: var(--amber-soft); color: var(--amber); }
+  .tag.green { background: var(--green-soft); color: var(--green); }
+  .tag.purple { background: var(--purple-soft); color: var(--purple); }
+  .tag.red { background: var(--red-soft); color: var(--red); }
+  .tag.gray { background: var(--card-2); color: var(--sub); }
+  .item .foot { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .check {
+    appearance: none; margin: 0; flex: none; width: 22px; height: 22px; border-radius: 7px;
+    border: 1.6px solid var(--line-strong); background: transparent; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; color: transparent;
+    font-size: 13px; line-height: 1; transition: all .15s ease; padding: 0;
+  }
+  .check:checked { background: var(--green); border-color: var(--green); color: #fff; }
+  .check-wrap { flex: none; margin-top: 5px; }
+  /* progress bar inside card */
+  .prog { margin-top: 11px; }
+  .prog-head { display: flex; justify-content: space-between; align-items: baseline; font-size: 11.5px; color: var(--sub); margin-bottom: 5px; }
+  .prog-head b { font-size: 12.5px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+  .bar { height: 8px; border-radius: 99px; background: var(--card-2); overflow: hidden; box-shadow: inset 0 0 0 1px var(--line); }
+  html[data-theme="dark"] .bar { box-shadow: none; background: #26292F; }
+  .bar > i { display: block; height: 100%; border-radius: 99px; transition: width .9s cubic-bezier(.22,.7,.2,1); }
+  .bar.blue > i { background: linear-gradient(90deg, #4E93FF, #3182F6); }
+  .bar.green > i { background: linear-gradient(90deg, #2ED3A7, #00A87E); }
+  .bar.amber > i { background: linear-gradient(90deg, #FFC46B, #E8830C); }
+  .bar.purple > i { background: linear-gradient(90deg, #A892FF, #7B61FF); }
+  .bar.gold > i { background: linear-gradient(90deg, #EBCB74, #B8860B); }
+  .bar.red > i { background: linear-gradient(90deg, #FF8A94, #F04452); }
+  .bar.teal > i { background: linear-gradient(90deg, #59D2D2, #0FA3A3); }
+  /* track card */
+  .track .t-head { display: flex; align-items: center; gap: 9px; }
+  .track .t-head .ico { flex: none; width: 30px; height: 30px; border-radius: 10px; background: var(--card-2); display: flex; align-items: center; justify-content: center; font-size: 15px; }
+  .track .t-title { font-size: 13.5px; font-weight: 700; letter-spacing: -0.02em; }
+  .track .t-sub { font-size: 11px; color: var(--faint); margin-top: 1px; }
+  .track .t-pct { margin-left: auto; font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .track .t-detail { font-size: 11.5px; color: var(--sub); margin-top: 8px; }
+  /* hotel cards */
+  .hcard h3 { margin: 0 0 8px; font-size: 14.5px; font-weight: 700; display: flex; align-items: center; gap: 7px; }
+  .hcard ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 5px; }
+  .hcard li { font-size: 12.5px; color: var(--sub); padding-left: 13px; position: relative; line-height: 1.5; }
+  .hcard li::before { content: ""; position: absolute; left: 2px; top: 8px; width: 4px; height: 4px; border-radius: 50%; background: var(--line-strong); }
+  .hcard .foot { margin-top: 10px; font-size: 11.5px; color: var(--faint); border-top: 1px dashed var(--line); padding-top: 9px; }
+  .milestones { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-top: 4px; }
+  .ms { background: var(--card-2); border-radius: 12px; padding: 9px 6px; text-align: center; border: 1px solid var(--line); }
+  .ms .l { font-size: 12px; font-weight: 700; }
+  .ms .d { font-size: 9.5px; color: var(--faint); margin-top: 2px; }
+  /* shopping */
+  .deal { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .deal:last-child { border-bottom: none; }
+  .deal .n { flex: 1; min-width: 0; }
+  .deal .n b { display: block; font-size: 13px; font-weight: 650; }
+  .deal .n span { font-size: 11px; color: var(--faint); }
+  .deal .p { text-align: right; flex: none; }
+  .deal .p b { display: block; font-size: 13.5px; font-weight: 750; color: var(--blue); font-variant-numeric: tabular-nums; }
+  .deal .p span { font-size: 10.5px; color: var(--green); }
+  .code-row { display: flex; align-items: center; gap: 9px; background: var(--card-2); border: 1px dashed var(--line-strong); border-radius: 14px; padding: 11px 12px; margin-top: 10px; }
+  .code-row .v { flex: 1; font-family: "SF Mono", ui-monospace, Menlo, monospace; font-size: 14px; font-weight: 700; letter-spacing: .04em; }
+  .code-row .until { font-size: 10.5px; color: var(--faint); }
+  .btn {
+    appearance: none; border: none; background: var(--blue); color: #fff; border-radius: 11px;
+    padding: 8px 13px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit;
+    transition: transform .12s ease, background-color .2s ease; white-space: nowrap;
+  }
+  .btn:active { transform: scale(.95); }
+  .btn.gray { background: var(--card-2); color: var(--text); }
+  .btn.ghost { background: transparent; color: var(--blue); padding: 8px 6px; }
+  .route { display: flex; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+  .route:last-child { border-bottom: none; }
+  .route .l { flex: none; font-size: 10.5px; font-weight: 800; padding: 3px 7px; border-radius: 7px; background: var(--blue-soft); color: var(--blue); height: fit-content; margin-top: 1px; }
+  .route .b b { display: block; font-size: 12.5px; font-weight: 650; line-height: 1.45; }
+  .route .b span { font-size: 11px; color: var(--faint); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .chip { font-size: 11px; color: var(--sub); background: var(--card-2); border: 1px solid var(--line); padding: 5px 9px; border-radius: 99px; }
+  /* accounts */
+  .acc-group { margin-bottom: 12px; }
+  .acc-group .g-head { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 700; margin: 0 4px 8px; }
+  .acc-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+  .acc { display: inline-flex; align-items: center; gap: 5px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 7px 10px; font-size: 12px; color: var(--text); box-shadow: var(--shadow); }
+  .acc .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+  .privacy { margin-top: 12px; font-size: 11px; color: var(--faint); line-height: 1.6; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 13px; }
+  /* notes */
+  .note-form { display: flex; gap: 8px; }
+  .note-form input {
+    flex: 1; appearance: none; border: 1px solid var(--line); background: var(--card-2); color: var(--text);
+    border-radius: 13px; padding: 12px 14px; font-size: 14px; outline: none; font-family: inherit; min-width: 0;
+  }
+  .note-form input:focus { border-color: var(--blue); background: var(--card); }
+  .note-list { margin-top: 10px; display: grid; gap: 7px; }
+  .note-item { display: flex; gap: 9px; align-items: flex-start; background: var(--card); border: 1px solid var(--line); border-radius: 13px; padding: 11px 12px; box-shadow: var(--shadow); }
+  .note-item .txt { flex: 1; font-size: 13px; line-height: 1.5; word-break: break-word; white-space: pre-wrap; }
+  .note-item .ts { font-size: 10px; color: var(--faint); margin-top: 3px; }
+  .note-item .del { border: none; background: transparent; color: var(--faint); font-size: 15px; cursor: pointer; padding: 0 2px; line-height: 1; }
+  .empty { text-align: center; color: var(--faint); font-size: 12.5px; padding: 26px 10px; background: var(--card); border: 1px dashed var(--line-strong); border-radius: 16px; }
+  footer { margin-top: 26px; text-align: center; font-size: 10.5px; color: var(--faint); line-height: 1.7; }
+  footer .stamp { display: inline-flex; align-items: center; gap: 5px; background: var(--card); border: 1px solid var(--line); border-radius: 99px; padding: 6px 12px; font-size: 10.5px; color: var(--sub); }
+  .toast {
+    position: fixed; left: 50%; bottom: calc(24px + var(--safe-bottom)); transform: translate(-50%, 20px);
+    background: #191F28; color: #fff; font-size: 12.5px; font-weight: 600; padding: 10px 16px;
+    border-radius: 99px; opacity: 0; pointer-events: none; transition: all .25s ease; z-index: 99; box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  }
+  .toast.on { opacity: 1; transform: translate(-50%, 0); }
+  .fade { animation: fade .32s ease both; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  @media (max-width: 360px) { .dday b { font-size: 34px; } .stats { gap: 6px; } .stat .n { font-size: 19px; } }
+</style>
+</head>
+<body>
+<header class="top" id="topbar">
+  <div class="wrap">
+    <div class="top-row">
+      <div class="brand">
+        <h1 id="appTitle">업무 현황판</h1>
+        <div class="sub" id="appSub">불러오는 중…</div>
+      </div>
+      <button class="icon-btn" id="refreshBtn" aria-label="데이터 새로고침" title="새로고침">⟳</button>
+      <button class="icon-btn" id="themeBtn" aria-label="다크 모드 전환" title="테마">☾</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero" id="hero"></div>
+  <div class="stats" id="stats"></div>
+
+  <div class="searchbar" id="searchbar">
+    <span class="ic">🔍</span>
+    <input id="q" type="search" inputmode="search" placeholder="검색 — 교육, 힐튼, 블프, 12/4…" autocomplete="off" enterkeyhint="search" />
+    <button class="clear" id="clearQ" aria-label="지우기">✕</button>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="content"></div>
+
+  <section class="block">
+    <div class="sec-head"><h2>📝 내 메모장</h2><span class="aside" id="noteCount"></span></div>
+    <form class="note-form" id="noteForm">
+      <input id="noteInput" type="text" placeholder="할 일이나 메모를 적어 두세요" autocomplete="off" maxlength="200" />
+      <button class="btn" type="submit">추가</button>
+    </form>
+    <div class="note-list" id="noteList"></div>
+  </section>
+
+  <footer>
+    <div class="stamp" id="stamp">불러오는 중…</div>
+    <div style="margin-top:8px">체크·메모는 이 기기에만 저장됩니다 · 민감정보 없이 공개 페이지</div>
+  </footer>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+const FALLBACK = {"meta":{"title":"업무 현황판","owner":"최현우","updated":"2026-11-23T23:10:00-05:00","updatedLabel":"2026-11-23 23:10 EST","note":"이 파일만 고치면 화면이 바뀝니다."},"trip":{"title":"포트웨인 출장","subtitle":"Homewood Suites by Hilton Fort Wayne","startDate":"2026-10-27","returnDate":"2027-01-07","nightsDone":27,"nightsTotal":72},"tracks":[{"id":"hilton","tab":"hotel","icon":"🏨","title":"힐튼 체류 · 72박","sub":"Homewood Suites 포트웨인 · 10/27~1/7","now":27,"goal":72,"unit":"박","detail":"45박 남음 · 40·50·60·70박 마일스톤 · 보유 37,859P","tone":"gold"},{"id":"marriott","tab":"hotel","icon":"🏅","title":"메리어트 플래티넘 16박 챌린지","sub":"2027-02-28 마감 · 등록 완료","now":0,"goal":16,"unit":"박","detail":"12/22 체크인~1/7 체크아웃이면 딱 16박","tone":"red"},{"id":"edu","tab":"progress","icon":"🎓","title":"삼성SDI 4분기 안전보건교육","sub":"3강 수강 중 · 기말고사 남음","now":73,"goal":100,"unit":"%","detail":"12/4 마감 · 진도 100% 후 기말고사 응시","tone":"blue"},{"id":"stay","tab":"overview","icon":"✈️","title":"출장 일정 진행률","sub":"10/27 출국 → 1/7 귀국","now":27,"goal":72,"unit":"박","detail":"45일 남음","tone":"teal"},{"id":"accounts","tab":"accounts","icon":"🔗","title":"주요 계정 연결","sub":"여행·쇼핑·금융·정부·호텔","now":38,"goal":38,"unit":"곳","detail":"38곳 연결 완료","tone":"green"},{"id":"review","tab":"progress","icon":"✍️","title":"미작성 후기·연락처 정리","sub":"쿠팡 1건 · 무신사 4건 · 귀국편 연락처","now":0,"goal":6,"unit":"건","detail":"무신사 후기 4건은 8,000원 적립","tone":"purple"}],"items":[{"id":"edu-q4","cat":"progress","icon":"🎓","title":"삼성SDI 4분기 안전보건교육 + 기말고사","note":"eshteam.co.kr에서 3강(73%)~6강 수강 중. 진도 100%를 채운 뒤 기말고사까지 응시하면 끝.","due":"2026-12-04","dueLabel":"12/4 마감","progress":{"now":73,"goal":100,"unit":"%","label":"진도 73%"},"priority":"high"},{"id":"garden-inn","cat":"decision","icon":"🔄","title":"11/26 힐튼 가든인으로 옮길까","note":"11/26~12/14 18박만 예약 가능(12/14~12/18 매진). 2X Points 요금 $170 이하, 회사 상한 $170. 옮기면 적립이 3배.","due":"2026-11-26","dueLabel":"11/26까지","progress":{"now":4,"goal":18,"unit":"박","label":"확보 가능 18박 중 4박 검토"},"priority":"high"},{"id":"marriott-checkin","cat":"decision","icon":"📅","title":"메리어트 체크인 날짜: 12/22 vs 12/19~20","note":"12/22~1/7이 정확히 16박. 다만 실적 반영이 1~3일 걸려 1/7 당일 승급을 원하면 2~3일 앞당기거나 중간에 한 번 끊기.","due":"2026-12-19","dueLabel":"12/19 전 결정","priority":"high"},{"id":"blackfriday-route","cat":"decision","icon":"🛒","title":"블프 동선 3안 중 선택","note":"① 5:50 Apple Glen(콜스→베스트바이→타깃→딕스) ② 6AM Glenbrook 몰 ③ 목요일 밤 온라인 우선 후 매장 픽업.","due":"2026-11-26","dueLabel":"11/26 밤까지","priority":"medium"},{"id":"park-booking","cat":"decision","icon":"🏕️","title":"국립공원 야영장 — 공원·날짜 정하기","note":"1~2월분이 12/1 10:00 KST(포트웨인 11/30 20:00)에 열립니다. 공원과 날짜를 정해 두면 오픈 즉시 감시를 걸 수 있어요.","due":"2026-12-01","dueLabel":"12/1 10:00 KST 오픈","priority":"medium"},{"id":"amazon-cart","cat":"decision","icon":"📦","title":"아마존 장바구니 1개 — 살까 말까","note":"COOMAX 미니 이어피스 $18.99, 세일 표시 없음. 무료배송 기준 $35라 단독 구매면 배송비가 붙습니다.","priority":"low"},{"id":"coupon-29cm","cat":"decision","icon":"🎟️","title":"29CM 쿠폰 21장 — 쓸까","note":"11/30~12/1에 만료됩니다. 쿠페이머니 47,438원도 함께 확인.","due":"2026-11-30","dueLabel":"11/30 만료","priority":"medium"},{"id":"card-points","cat":"progress","icon":"💳","title":"삼성·현대카드 포인트·실적·혜택 확인","note":"모니모페이·현대카드 앱 본인 인증 대기 중. 인증이 되면 이어서 진행합니다.","priority":"medium"},{"id":"japan-clinic","cat":"progress","icon":"🏥","title":"일본 마운자로 처방 병원 전화 확인","note":"방문 도시와 일정이 정해지면 일본어 전화 조사를 진행합니다.","priority":"low"},{"id":"account-waiting","cat":"progress","icon":"⏳","title":"Explore 대기 목록","note":"Gmail 뉴스레터 201통 정리, 출석체크 루틴, 숨은 보험금·휴면예금(본인인증), 안 쓰는 사이트 탈퇴, 기프티콘·구매확정, 인스타 맞팔 정리.","priority":"low"},{"id":"morning-call","cat":"upcoming","icon":"⏰","title":"모닝콜","note":"11/24(화) 07:00 발신 예약 완료. 받지 않으면 10분 간격으로 다시 겁니다.","due":"2026-11-24","dueLabel":"11/24 07:00"},{"id":"thanksgiving","cat":"upcoming","icon":"🦃","title":"추수감사절 — 대부분 매장 휴무","note":"11/26(목). 온라인 딜은 이날 밤부터 풀립니다.","due":"2026-11-26","dueLabel":"11/26"},{"id":"blackfriday","cat":"upcoming","icon":"🌙","title":"블랙프라이데이 매장 오픈","note":"11/27(금) 5~6AM. 콜스 5AM, 베스트바이·타깃·딕스 6AM.","due":"2026-11-27","dueLabel":"11/27 05:00"},{"id":"youth-savings","cat":"upcoming","icon":"🏦","title":"청년미래적금 2차 계좌개설 마감","note":"2차에 신청해 두셨다면 11/27까지 계좌 개설 필요. 3차 공고는 12/2 예산 의결 후.","due":"2026-11-27","dueLabel":"11/27"},{"id":"cyber-monday","cat":"upcoming","icon":"🏷️","title":"eBay 할인코드 · 29CM 쿠폰 마감","note":"CYBERFINDS20은 11/30 23:59(PT)까지, 29CM 쿠폰은 11/30~12/1 만료.","due":"2026-11-30","dueLabel":"11/30"},{"id":"park-open","cat":"upcoming","icon":"🏕️","title":"국립공원 야영장 1~2월 예약 오픈","note":"12/1 10:00 KST = 11/30 20:00 포트웨인 시간.","due":"2026-12-01","dueLabel":"12/1 10:00 KST"},{"id":"quiz-announce","cat":"upcoming","icon":"🎁","title":"퀴즈 이벤트 발표","note":"부천시 12/2, 행안부 12/4 발표.","due":"2026-12-04","dueLabel":"12/2 · 12/4"},{"id":"dicks-end","cat":"upcoming","icon":"👟","title":"딕스 세일 종료","note":"11/22~12/5. 러닝화 40%, 클리어런스 최대 80%.","due":"2026-12-05","dueLabel":"12/5 종료"},{"id":"hometown-give","cat":"upcoming","icon":"💝","title":"고향사랑기부 알림","note":"12월 중순 10만원 공제 + 3만원 답례품 안내 예정.","due":"2026-12-15","dueLabel":"12월 중순"},{"id":"car-tax","cat":"upcoming","icon":"🚗","title":"자동차세 연납","note":"귀국 후 1/16~31 위택스에서 신청하면 약 4.58% 할인.","due":"2027-01-16","dueLabel":"2027-01-16"},{"id":"marriott-deadline","cat":"upcoming","icon":"🏁","title":"메리어트 챌린지 최종 마감","note":"2027-02-28까지 유료 16박. 2월 1일 이후 마지막 체크인을 하면 카드 유효기간이 2029년 2월까지로 늘어납니다.","due":"2027-02-28","dueLabel":"2027-02-28"},{"id":"marriott-enroll","cat":"done","icon":"🏅","title":"메리어트 플래티넘 16박 챌린지 등록","note":"본보이 로그인 후 챌린지 등록 완료. 2027-02-28 마감."},{"id":"skt-plan","cat":"done","icon":"📱","title":"SKT '0 청년 다이렉트 48' 변경","note":"월 55,000원 → 48,000원. 즉시 적용, 위약금 0원."},{"id":"gmail-clean","cat":"done","icon":"🗑️","title":"Gmail Temu·Hotels.com 광고 999통 정리","note":"호텔 예약·영수증 70통은 보호."},{"id":"accounts-link","cat":"done","icon":"🔗","title":"주요 사이트·앱 38곳 연결","note":"여행·쇼핑·금융·정부·호텔 계정 연결 완료."},{"id":"points-audit","cat":"done","icon":"💰","title":"쇼핑·영화 포인트·만료 쿠폰 점검","note":"29CM 쿠폰 21장, 쿠페이머니 47,438원 확인."},{"id":"savings-research","cat":"done","icon":"🏦","title":"청년미래적금·자동차세·고향사랑·지원금 조사","note":"신청 조건과 일정 정리."},{"id":"insurance-search","cat":"done","icon":"🛡️","title":"숨은 보험금·휴면예금·카드포인트 경로 확인","note":"통합조회 경로 정리(본인인증 필요)."},{"id":"camping-research","cat":"done","icon":"⛺","title":"국립공원·숲나들e 빈자리 감시 조사","note":"1~2월분 12/1 10:00 KST 오픈 확인."},{"id":"mail-expense","cat":"done","icon":"📧","title":"정기구독·지출 내역 메일 정리","note":"구독 항목과 결제일 정리."},{"id":"skt-benefit","cat":"done","icon":"📶","title":"T월드 요금제·혜택·로밍 조회","note":"현재 요금제와 부가서비스 확인."},{"id":"ke-mileage","cat":"done","icon":"✈️","title":"대한항공 마일리지 사후적립 확인","note":"출국편 6,538마일 100% 적립, 누락 0건."},{"id":"mail-classify","cat":"done","icon":"📮","title":"메일함 광고 메일 전수 분류","note":"보호 대상과 광고 분리."},{"id":"quiz-events","cat":"done","icon":"🎁","title":"공공기관 퀴즈 2건 응모","note":"행안부 12/4, 부천시 12/2 발표."},{"id":"gov-refund","cat":"done","icon":"🏛️","title":"정부24 미환급금·홈택스 장려금 조회","note":"미환급금 0건, 환급금 0원."}],"hotel":{"cards":[{"id":"hilton-card","icon":"🏨","title":"힐튼 다이아몬드","lines":["10/27~1/7 · 72박 중 27박 완료(37.5%)","보유 포인트 37,859P · 45박 남음","40·50·60·70박 마일스톤 보너스 예정"],"foot":"Homewood Suites는 $1당 10P, 가든인은 2X 요금이면 $1당 30P."},{"id":"garden-card","icon":"🔄","title":"힐튼 가든인 포트웨인 (검토 중)","lines":["11/26~12/14 18박만 예약 가능","12/14~12/18은 매진 → 6박은 메리어트로 당기기","2X Points 요금 $170 이하 = 회사 상한에 맞음"],"foot":"옮기면 같은 기간 적립이 약 3배(약 14만P)."},{"id":"marriott-card","icon":"🏅","title":"메리어트 플래티넘 챌린지","lines":["0/16박 · 2027-02-28 마감","12/22 체크인~1/7 체크아웃 = 딱 16박","실적은 체크아웃 후 1~3일 뒤 반영"],"foot":"16박이 모두 유료 직접 예약이어야 인정됩니다."},{"id":"ke-card","icon":"✈️","title":"대한항공 · 귀국편","lines":["1/7 귀국편 예약 완료 · 회원번호 입력됨","출국편 6,538마일 적립 완료(2036-12 만료)","예약에 연락처가 비어 있음"],"foot":"연락처를 넣으면 변경 알림을 받을 수 있습니다."}],"milestones":[{"label":"40박","done":false,"note":"보너스 포인트"},{"label":"50박","done":false,"note":"보너스 포인트"},{"label":"60박","done":false,"note":"보너스 포인트"},{"label":"70박","done":false,"note":"보너스 포인트"}]},"shopping":{"headline":"11/27(금) 블랙프라이데이 · 추수감사절 11/26은 대부분 휴무","deals":[{"name":"AirPods Pro 3","price":"$149","off":"-$100 역대 최저","where":"Amazon"},{"name":"MacBook Air 13 M5 (16/512)","price":"$989","off":"-$310","where":"Amazon"},{"name":"Apple Watch S12 42mm","price":"$299","off":"-$100","where":"Amazon · BB"},{"name":"Sony WH-1000XM5","price":"$169","off":"-$229","where":"Best Buy"},{"name":"TCL 65\" 4K TV","price":"$229.99","off":"-$240","where":"Best Buy"},{"name":"Switch 2 + 마리오카트","price":"$499.99","off":"-$50","where":"BB · Target"},{"name":"Dick's 신발 전체","price":"최대 50%","off":"러닝화 40%","where":"Dick's"},{"name":"On 클라우드X4 등","price":"$98~","off":"최대 82%","where":"Dick's"},{"name":"New Balance 9060","price":"$88.97~","off":"정가 $160","where":"Dick's"},{"name":"노스페이스 후디","price":"$45.50","off":"-30%","where":"Amazon"}],"routes":[{"label":"실속형","title":"5:50 Apple Glen → 콜스 → 베스트바이 → 타깃 → 딕스","note":"네 곳이 걸어서 닿는 거리 · 8시 전에 종료"},{"label":"몰 중심","title":"6AM Glenbrook Square → 10AM 노스크레스트","note":"몰 102개 매장 · 이어서 콜리시움"},{"label":"온라인 우선","title":"목요일 밤 베스트바이 앱 24시간 딜 → 금요일 픽업","note":"아마존 라이트닝딜도 같은 시간대"}],"code":{"label":"eBay 할인코드","value":"CYBERFINDS20","until":"11/30 23:59 PT까지"},"nearby":["Fleet Feet Coventry — 차로 2분·1km, 살로몬·HOKA 러닝화","Best Buy·Target·Dick's·Kohl's — Apple Glen 한 블록","Costco·Sam's Club — 회원권 필요","Walmart Coldwater — 11/27 6AM, 온라인은 23일부터"]},"accounts":[{"group":"여행","icon":"✈️","names":["코레일","야놀자","대한항공","호텔스닷컴","마이리얼트립","우버","트래블월릿"]},{"group":"쇼핑","icon":"🛍️","names":["쿠팡","아마존","이베이","무신사","29CM","SSG","알리익스프레스","룩핀"]},{"group":"금융","icon":"💳","names":["삼성카드","현대카드","토스증권","동행복권"]},{"group":"생활","icon":"🏠","names":["Google","Gmail","네이버","네이버 메일","인스타그램","링크드인","넷플릭스","유튜브","도어대시","요기요","캐치테이블"]},{"group":"정부·공공","icon":"🏛️","names":["정부24","홈택스","T월드","삼성복지포탈","숲나들e","캠핏"]},{"group":"호텔","icon":"🏨","names":["힐튼","메리어트"]}]};
+
+const LS_CHECK = "hw.checks.v1";
+const LS_NOTES = "hw.notes.v1";
+const LS_THEME = "hw.theme.v1";
+const LS_TAB = "hw.tab.v1";
+
+const CATS = [
+  { key: "all", label: "전체" },
+  { key: "progress", label: "진행 중" },
+  { key: "decision", label: "결정 필요" },
+  { key: "done", label: "완료" },
+  { key: "upcoming", label: "예정·알림" },
+  { key: "hotel", label: "호텔·마일리지" },
+  { key: "shopping", label: "블프 쇼핑" },
+  { key: "accounts", label: "계정" }
+];
+const CAT_LABEL = { progress: "진행 중", decision: "결정 필요", done: "완료", upcoming: "예정·알림", hotel: "호텔·마일리지", shopping: "블프 쇼핑", accounts: "계정" };
+const CAT_TONE = { progress: "blue", decision: "amber", done: "green", upcoming: "purple" };
+const TONE_BAR = { blue: "blue", green: "green", amber: "amber", purple: "purple", gold: "gold", red: "red", teal: "teal" };
+
+let DATA = null;
+let state = { tab: localStorage.getItem(LS_TAB) || "all", q: "" };
+let checks = loadJSON(LS_CHECK, {});
+let notes = loadJSON(LS_NOTES, []);
+
+function loadJSON(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
+function saveJSON(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+function pct(now, goal) { if (!goal) return 0; const p = (now / goal) * 100; return Math.max(0, Math.min(100, p)); }
+function fmtPct(p) { const r = Math.round(p * 10) / 10; return (Number.isInteger(r) ? r : r.toFixed(1)) + "%"; }
+function dnum(n) { return Number(n).toLocaleString("ko-KR"); }
+
+/* ── theme ─────────────────────────────── */
+function applyTheme(t) {
+  document.documentElement.setAttribute("data-theme", t);
+  const b = document.getElementById("themeBtn");
+  b.textContent = t === "dark" ? "☀︎" : "☾";
+  const meta = document.querySelector('meta[name="theme-color"]:not([media])');
+  if (meta) meta.setAttribute("content", t === "dark" ? "#101214" : "#F2F4F6");
+}
+function initTheme() {
+  const saved = localStorage.getItem(LS_THEME);
+  const sys = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  applyTheme(saved || sys);
+  document.getElementById("themeBtn").addEventListener("click", () => {
+    const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    applyTheme(next); localStorage.setItem(LS_THEME, next);
+  });
+  if (window.matchMedia) {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
+      if (!localStorage.getItem(LS_THEME)) applyTheme(e.matches ? "dark" : "light");
+    });
+  }
+}
+
+/* ── data ──────────────────────────────── */
+async function loadData(showToastMsg) {
+  let ok = false;
+  try {
+    const res = await fetch("./data.json?t=" + Date.now(), { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const j = await res.json();
+    if (!j || !Array.isArray(j.items)) throw new Error("bad shape");
+    DATA = j; ok = true;
+  } catch (e) {
+    DATA = FALLBACK;
+  }
+  render();
+  if (showToastMsg) toast(ok ? "최신 데이터로 새로고침했어요" : "오프라인 데이터로 표시 중");
+  return ok;
+}
+
+/* ── computed ──────────────────────────── */
+function counts() {
+  const c = { progress: 0, decision: 0, done: 0, upcoming: 0 };
+  DATA.items.forEach(i => { if (c[i.cat] != null) c[i.cat]++; });
+  return c;
+}
+function isChecked(id) { return !!checks[id]; }
+function overall() {
+  const items = DATA.items || [];
+  const total = items.length || 1;
+  const base = items.filter(i => i.cat === "done").length;
+  const extra = items.filter(i => i.cat !== "done" && isChecked(i.id)).length;
+  const done = base + extra;
+  return { done, total: items.length, pct: (done / total) * 100 };
+}
+function tripInfo() {
+  const t = DATA.trip || {};
+  const ret = new Date(t.returnDate + "T00:00:00");
+  const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const days = Math.round((ret - today) / 86400000);
+  return { days, trip: t, stayPct: pct(t.nightsDone || 0, t.nightsTotal || 0) };
+}
+
+/* ── views ─────────────────────────────── */
+function render() {
+  if (!DATA) return;
+  const meta = DATA.meta || {};
+  document.getElementById("appTitle").textContent = meta.title || "업무 현황판";
+  document.getElementById("appSub").textContent = (meta.owner ? meta.owner + " · " : "") + "업데이트 " + (meta.updatedLabel || "");
+  document.title = (meta.title || "업무 현황판") + (meta.owner ? " · " + meta.owner : "");
+  document.getElementById("stamp").textContent = "마지막 업데이트 " + (meta.updatedLabel || "-");
+  renderHero();
+  renderStats();
+  renderTabs();
+  renderContent();
+  renderNotes();
+}
+function renderHero() {
+  const { days, trip, stayPct } = tripInfo();
+  const ov = overall();
+  const dd = days > 0 ? "D-" + days : days === 0 ? "D-DAY" : "D+" + Math.abs(days);
+  document.getElementById("hero").innerHTML = `
+    <div class="hero-top">
+      <div>
+        <div class="label">${esc(trip.title || "출장")} · ${esc(trip.subtitle || "")}</div>
+        <div class="dday"><b>${dd}</b><span>귀국까지</span></div>
+      </div>
+      <div class="right">귀국<br><b>${esc((trip.returnDate || "").replace(/-/g, "."))}</b></div>
+    </div>
+    <div class="hero-bars">
+      <div>
+        <div class="hbar-head"><span>체류 진행률</span><b>${trip.nightsDone}/${trip.nightsTotal}박 · ${fmtPct(stayPct)}</b></div>
+        <div class="hbar"><i style="width:0%" data-w="${stayPct.toFixed(1)}"></i></div>
+      </div>
+      <div>
+        <div class="hbar-head"><span>전체 작업 완료율</span><b>${ov.done}/${ov.total} · ${fmtPct(ov.pct)}</b></div>
+        <div class="hbar"><i style="width:0%" data-w="${ov.pct.toFixed(1)}"></i></div>
+      </div>
+    </div>
+    <div class="hero-note">${days > 0 ? days + "일 남음" : "귀국일"} · 체크한 항목까지 완료율에 반영됩니다</div>`;
+  requestAnimationFrame(() => {
+    document.querySelectorAll(".hbar > i").forEach(el => { el.style.width = el.dataset.w + "%"; });
+  });
+}
+function renderStats() {
+  const c = counts(); const n = DATA.items.length || 1;
+  const tiles = [
+    { k: "progress", t: "진행 중", n: c.progress, p: fmtPct(c.progress / n * 100) },
+    { k: "decision", t: "결정 필요", n: c.decision, p: fmtPct(c.decision / n * 100) },
+    { k: "done", t: "완료", n: c.done, p: fmtPct(c.done / n * 100) },
+    { k: "upcoming", t: "예정·알림", n: c.upcoming, p: fmtPct(c.upcoming / n * 100) }
+  ];
+  document.getElementById("stats").innerHTML = tiles.map(x => `
+    <div class="stat s-${x.k}" data-tab="${x.k}">
+      <div class="n">${x.n}</div><div class="t">${x.t}</div><div class="p">${x.p}</div>
+    </div>`).join("");
+  document.querySelectorAll(".stat").forEach(el => el.addEventListener("click", () => { setTab(el.dataset.tab); window.scrollTo({ top: 120, behavior: "smooth" }); }));
+}
+function tabCount(k) {
+  if (k === "all") return DATA.items.length;
+  if (k === "hotel") return (DATA.hotel && DATA.hotel.cards ? DATA.hotel.cards.length : 0);
+  if (k === "shopping") return (DATA.shopping && DATA.shopping.deals ? DATA.shopping.deals.length : 0);
+  if (k === "accounts") {
+    let c = 0; (DATA.accounts || []).forEach(g => c += (g.names || []).length); return c;
+  }
+  return DATA.items.filter(i => i.cat === k).length;
+}
+function renderTabs() {
+  document.getElementById("tabs").innerHTML = CATS.map(c => `
+    <button class="tab ${state.tab === c.key ? "on" : ""}" data-tab="${c.key}">
+      ${c.label}<span class="c">${tabCount(c.key)}</span>
+    </button>`).join("");
+  document.querySelectorAll(".tab").forEach(el => el.addEventListener("click", () => setTab(el.dataset.tab)));
+}
+function setTab(k) { state.tab = k; localStorage.setItem(LS_TAB, k); renderTabs(); renderContent(); }
+
+function itemCard(it) {
+  const checked = isChecked(it.id);
+  const tone = CAT_TONE[it.cat] || "gray";
+  const pr = it.progress;
+  const prPct = pr ? pct(pr.now, pr.goal) : (it.cat === "done" ? 100 : (checked ? 100 : 0));
+  const barTone = pr && pr.tone ? pr.tone : (it.cat === "done" ? "green" : tone);
+  let progHTML = "";
+  if (pr) {
+    progHTML = `
+      <div class="prog">
+        <div class="prog-head"><span>${esc(pr.label || "진행률")}</span><b>${dnum(pr.now)}${pr.unit === "%" ? "%" : "/" + dnum(pr.goal) + pr.unit}</b></div>
+        <div class="bar ${TONE_BAR[barTone] || "blue"}"><i style="width:0%" data-w="${prPct.toFixed(1)}"></i></div>
+      </div>`;
+  }
+  return `
+  <article class="card item ${checked || it.cat === "done" ? "done" : ""}" data-id="${esc(it.id)}">
+    <div class="item-row">
+      <div class="ico">${esc(it.icon || "•")}</div>
+      <div class="body">
+        <div class="title-row">
+          <h3>${esc(it.title)}</h3>
+          ${it.cat === "done" ? '<span class="tag green">완료</span>' : (checked ? '<span class="tag green">확인함</span>' : "")}
+        </div>
+        ${it.note ? `<p class="note">${esc(it.note)}</p>` : ""}
+        ${progHTML}
+        <div class="foot">
+          <span class="tag ${tone}">${CAT_LABEL[it.cat] || it.cat}</span>
+          ${it.dueLabel ? `<span class="tag gray">${esc(it.dueLabel)}</span>` : ""}
+          ${it.priority === "high" ? '<span class="tag red">우선</span>' : ""}
+        </div>
+      </div>
+      <label class="check-wrap" title="확인함으로 표시">
+        <input class="check" type="checkbox" data-check="${esc(it.id)}" ${checked ? "checked" : ""} ${it.cat === "done" ? "disabled" : ""} aria-label="${esc(it.title)} 확인함" />
+      </label>
+    </div>
+  </article>`;
+}
+function trackCard(t) {
+  const p = pct(t.now, t.goal);
+  const tone = TONE_BAR[t.tone] || "blue";
+  const unit = t.unit === "%" ? "%" : t.unit;
+  const val = t.unit === "%" ? dnum(t.now) + "%" : dnum(t.now) + "/" + dnum(t.goal) + unit;
+  return `
+  <article class="card track">
+    <div class="t-head">
+      <div class="ico">${esc(t.icon || "•")}</div>
+      <div style="min-width:0">
+        <div class="t-title">${esc(t.title)}</div>
+        <div class="t-sub">${esc(t.sub || "")}</div>
+      </div>
+      <div class="t-pct" style="color:var(--${tone === "gold" ? "gold" : tone})">${fmtPct(p)}</div>
+    </div>
+    <div class="prog">
+      <div class="prog-head"><span>${val}</span><b>${fmtPct(p)}</b></div>
+      <div class="bar ${tone}"><i style="width:0%" data-w="${p.toFixed(1)}"></i></div>
+    </div>
+    ${t.detail ? `<div class="t-detail">${esc(t.detail)}</div>` : ""}
+  </article>`;
+}
+function hotelView() {
+  const h = DATA.hotel || {}; const tracks = (DATA.tracks || []).filter(t => t.tab === "hotel");
+  const cards = (h.cards || []).map(c => `
+    <article class="card hcard">
+      <h3><span>${esc(c.icon || "🏨")}</span>${esc(c.title)}</h3>
+      <ul>${(c.lines || []).map(l => `<li>${esc(l)}</li>`).join("")}</ul>
+      ${c.foot ? `<div class="foot">${esc(c.foot)}</div>` : ""}
+    </article>`).join("");
+  const ms = (h.milestones || []).map(m => `<div class="ms"><div class="l">${esc(m.label)}</div><div class="d">${esc(m.note || "")}</div></div>`).join("");
+  return `
+    <section class="block"><div class="sec-head"><h2>진행률</h2><span class="aside">숙박·챌린지</span></div>
+      ${tracks.map(trackCard).join("")}
+    </section>
+    <section class="block"><div class="sec-head"><h2>호텔·항공</h2><span class="aside">${(h.cards || []).length}건</span></div>${cards}</section>
+    ${ms ? `<section class="block"><div class="sec-head"><h2>힐튼 마일스톤</h2><span class="aside">72박 기준</span></div>
+      <div class="card"><div class="milestones">${ms}</div></div></section>` : ""}`;
+}
+function shoppingView() {
+  const s = DATA.shopping || {};
+  const deals = (s.deals || []).map(d => `
+    <div class="deal"><div class="n"><b>${esc(d.name)}</b><span>${esc(d.where || "")}</span></div>
+      <div class="p"><b>${esc(d.price)}</b><span>${esc(d.off || "")}</span></div></div>`).join("");
+  const routes = (s.routes || []).map(r => `
+    <div class="route"><div class="l">${esc(r.label)}</div><div class="b"><b>${esc(r.title)}</b><span>${esc(r.note || "")}</span></div></div>`).join("");
+  const nearby = (s.nearby || []).map(n => `<div class="chip">${esc(n)}</div>`).join("");
+  const code = s.code || {};
+  return `
+    <section class="block">
+      <div class="sec-head"><h2>🛍️ 이번 블프</h2><span class="aside">${esc(s.headline || "")}</span></div>
+      <div class="card">
+        ${deals}
+        ${code.value ? `
+        <div class="code-row">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:10.5px;color:var(--faint)">${esc(code.label || "할인코드")} · ${esc(code.until || "")}</div>
+            <div class="v">${esc(code.value)}</div>
+          </div>
+          <button class="btn" data-copy="${esc(code.value)}">복사</button>
+        </div>` : ""}
+      </div>
+    </section>
+    <section class="block"><div class="sec-head"><h2>추천 동선</h2><span class="aside">11/27 아침</span></div>
+      <div class="card">${routes}</div></section>
+    <section class="block"><div class="sec-head"><h2>가까운 매장</h2><span class="aside">숙소 기준</span></div>
+      <div class="card"><div class="chips">${nearby}</div></div></section>`;
+}
+function accountsView() {
+  const groups = DATA.accounts || [];
+  let total = 0; groups.forEach(g => total += (g.names || []).length);
+  const tracks = (DATA.tracks || []).filter(t => t.tab === "accounts");
+  const body = groups.map(g => `
+    <div class="acc-group">
+      <div class="g-head"><span>${esc(g.icon || "•")}</span>${esc(g.group)} <span style="color:var(--faint);font-weight:500">${(g.names || []).length}</span></div>
+      <div class="acc-grid">${(g.names || []).map(n => `<span class="acc"><i class="dot"></i>${esc(n)}</span>`).join("")}</div>
+    </div>`).join("");
+  return `
+    ${tracks.map(trackCard).join("")}
+    <section class="block"><div class="sec-head"><h2>🔗 연결된 서비스</h2><span class="aside">${total}곳</span></div>${body}
+      <div class="privacy">아이디·비밀번호·전화번호·회원번호는 이 페이지에 담지 않았습니다. 이 페이지는 공개 주소이므로, 연결 여부만 확인용으로 봐 주세요.</div>
+    </section>`;
+}
+function searchView(q) {
+  const ql = q.toLowerCase();
+  const hit = s => (s || "").toLowerCase().includes(ql);
+  const items = DATA.items.filter(i => hit(i.title) || hit(i.note) || hit(i.dueLabel) || hit(CAT_LABEL[i.cat]));
+  const hcards = ((DATA.hotel || {}).cards || []).filter(c => hit(c.title) || (c.lines || []).some(hit) || hit(c.foot));
+  const deals = ((DATA.shopping || {}).deals || []).filter(d => hit(d.name) || hit(d.where));
+  const accs = [];
+  (DATA.accounts || []).forEach(g => (g.names || []).forEach(n => { if (hit(n) || hit(g.group)) accs.push(n); }));
+  const tracks = (DATA.tracks || []).filter(t => hit(t.title) || hit(t.sub) || hit(t.detail));
+  const total = items.length + hcards.length + deals.length + accs.length + tracks.length;
+  if (!total) return `<div class="empty">“${esc(q)}”에 맞는 항목이 없어요.<br>다른 말로 검색해 보세요.</div>`;
+  let out = `<div class="sec-head" style="margin-top:14px"><h2>검색 결과</h2><span class="aside">${total}건</span></div>`;
+  if (tracks.length) out += `<section class="block"><div class="sec-head"><h2>진행률</h2></div>${tracks.map(trackCard).join("")}</section>`;
+  if (items.length) out += `<section class="block"><div class="sec-head"><h2>항목</h2><span class="aside">${items.length}</span></div>${items.map(itemCard).join("")}</section>`;
+  if (hcards.length) out += hcards.map(c => `<article class="card hcard"><h3><span>${esc(c.icon || "🏨")}</span>${esc(c.title)}</h3><ul>${(c.lines || []).map(l => `<li>${esc(l)}</li>`).join("")}</ul></article>`).join("");
+  if (deals.length) out += `<section class="block"><div class="sec-head"><h2>쇼핑</h2></div><div class="card">${deals.map(d => `<div class="deal"><div class="n"><b>${esc(d.name)}</b><span>${esc(d.where || "")}</span></div><div class="p"><b>${esc(d.price)}</b><span>${esc(d.off || "")}</span></div></div>`).join("")}</div></section>`;
+  if (accs.length) out += `<section class="block"><div class="sec-head"><h2>계정</h2></div><div class="card"><div class="acc-grid">${accs.map(n => `<span class="acc"><i class="dot"></i>${esc(n)}</span>`).join("")}</div></div></section>`;
+  return out;
+}
+function renderContent() {
+  const c = document.getElementById("content");
+  let html = "";
+  if (state.q) {
+    html = searchView(state.q);
+  } else if (state.tab === "hotel") {
+    html = hotelView();
+  } else if (state.tab === "shopping") {
+    html = shoppingView();
+  } else if (state.tab === "accounts") {
+    html = accountsView();
+  } else {
+    const t = state.tab;
+    const tracks = (DATA.tracks || []).filter(x => t === "all" ? x.tab !== "accounts" : x.tab === t);
+    if (tracks.length) html += `<section class="block"><div class="sec-head"><h2>📊 진행률</h2><span class="aside">${tracks.length}개 지표</span></div>${tracks.map(trackCard).join("")}</section>`;
+    const items = t === "all" ? DATA.items : DATA.items.filter(i => i.cat === t);
+    html += `<section class="block"><div class="sec-head"><h2>${t === "all" ? "전체 항목" : CAT_LABEL[t]}</h2><span class="aside">${items.length}건</span></div>`;
+    html += items.length ? items.map(itemCard).join("") : `<div class="empty">이 분류에 항목이 없어요.</div>`;
+    html += `</section>`;
+    if (t === "all") html += `<section class="block"><div class="sec-head"><h2>빠른 이동</h2></div>
+      <div class="card" style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn gray" data-jump="hotel">호텔·마일리지</button>
+        <button class="btn gray" data-jump="shopping">블프 쇼핑</button>
+        <button class="btn gray" data-jump="accounts">계정 ${tabCount("accounts")}곳</button>
+      </div></section>`;
+  }
+  c.innerHTML = html;
+  c.classList.remove("fade"); void c.offsetWidth; c.classList.add("fade");
+  requestAnimationFrame(() => {
+    c.querySelectorAll(".bar > i").forEach(el => { el.style.width = el.dataset.w + "%"; });
+  });
+  // delegation
+  c.querySelectorAll("[data-check]").forEach(inp => {
+    inp.addEventListener("change", e => {
+      const id = e.target.dataset.check;
+      if (e.target.checked) checks[id] = Date.now(); else delete checks[id];
+      saveJSON(LS_CHECK, checks);
+      const card = e.target.closest(".item");
+      if (card) card.classList.toggle("done", e.target.checked);
+      renderHero(); renderContent(); toast(e.target.checked ? "확인함으로 표시했어요" : "표시를 해제했어요");
+    });
+  });
+  c.querySelectorAll("[data-copy]").forEach(b => {
+    b.addEventListener("click", async () => {
+      const v = b.dataset.copy;
+      try { await navigator.clipboard.writeText(v); }
+      catch (e) {
+        const ta = document.createElement("textarea"); ta.value = v; ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); } catch (_) {} ta.remove();
+      }
+      b.textContent = "복사됨 ✓"; toast(v + " 복사했어요");
+      setTimeout(() => { b.textContent = "복사"; }, 1800);
+    });
+  });
+  c.querySelectorAll("[data-jump]").forEach(b => b.addEventListener("click", () => { setTab(b.dataset.jump); window.scrollTo({ top: 120, behavior: "smooth" }); }));
+}
+
+/* ── notes ─────────────────────────────── */
+function renderNotes() {
+  const list = document.getElementById("noteList");
+  document.getElementById("noteCount").textContent = notes.length ? notes.length + "개" : "";
+  if (!notes.length) { list.innerHTML = `<div class="empty">아직 메모가 없어요. 위에 한 줄 적어 보세요.</div>`; return; }
+  list.innerHTML = notes.map(n => `
+    <div class="note-item" data-nid="${esc(n.id)}">
+      <div style="flex:1;min-width:0">
+        <div class="txt">${esc(n.text)}</div>
+        <div class="ts">${esc(n.ts || "")}</div>
+      </div>
+      <button class="del" aria-label="삭제" data-del="${esc(n.id)}">✕</button>
+    </div>`).join("");
+  list.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => {
+    notes = notes.filter(n => n.id !== b.dataset.del); saveJSON(LS_NOTES, notes); renderNotes(); toast("메모를 지웠어요");
+  }));
+}
+function initNotes() {
+  document.getElementById("noteForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const inp = document.getElementById("noteInput");
+    const v = inp.value.trim(); if (!v) return;
+    const d = new Date();
+    notes.unshift({ id: "n" + Date.now(), text: v, ts: `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}` });
+    saveJSON(LS_NOTES, notes); inp.value = ""; renderNotes(); toast("메모를 저장했어요");
+  });
+}
+
+/* ── misc ui ───────────────────────────── */
+let toastT = null;
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("on");
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("on"), 1900);
+}
+function initSearch() {
+  const inp = document.getElementById("q"), bar = document.getElementById("searchbar");
+  let t = null;
+  inp.addEventListener("input", () => {
+    clearTimeout(t);
+    t = setTimeout(() => {
+      state.q = inp.value.trim();
+      bar.classList.toggle("has-q", !!inp.value);
+      renderContent();
+    }, 90);
+  });
+  document.getElementById("clearQ").addEventListener("click", () => {
+    inp.value = ""; state.q = ""; bar.classList.remove("has-q"); renderContent(); inp.focus();
+  });
+}
+function initScroll() {
+  const top = document.getElementById("topbar");
+  const onScroll = () => top.classList.toggle("scrolled", window.scrollY > 6);
+  window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+}
+function initSW() {
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
+  }
+}
+
+(async function boot() {
+  initTheme(); initSearch(); initNotes(); initScroll(); initSW();
+  document.getElementById("refreshBtn").addEventListener("click", () => loadData(true));
+  await loadData(false);
+})();
+</script>
+</body>
+</html>

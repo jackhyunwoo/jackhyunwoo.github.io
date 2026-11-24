@@ -1,0 +1,25 @@
+{
+  "name": "업무 현황판",
+  "short_name": "현황판",
+  "description": "최현우님의 업무·생활 현황판",
+  "lang": "ko",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#F2F4F6",
+  "theme_color": "#3182F6",
+  "categories": ["productivity", "lifestyle"],
+  "icons": [
+    { "src": "./icons/icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "결정 필요", "url": "./?tab=decision" },
+    { "name": "블프 쇼핑", "url": "./?tab=shopping" }
+  ]
+}
