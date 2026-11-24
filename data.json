@@ -2,8 +2,8 @@
   "meta": {
     "title": "업무 현황판",
     "owner": "최현우",
-    "updated": "2026-11-23T23:25:00-05:00",
-    "updatedLabel": "2026-11-23 23:25 EST",
+    "updated": "2026-11-23T23:16:00-05:00",
+    "updatedLabel": "2026-11-23 23:16 EST (캘린더 반영)",
     "note": "이 파일만 고치면 화면이 바뀝니다."
   },
   "trip": {
@@ -402,6 +402,51 @@
       "icon": "🏛️",
       "title": "정부24 미환급금·홈택스 장려금 조회",
       "note": "미환급금 0건, 환급금 0원."
+    },
+    {
+      "id": "cal-xmas-eve",
+      "cat": "upcoming",
+      "icon": "🎄",
+      "title": "크리스마스 이브 (캘린더)",
+      "note": "Google·iPhone 캘린더 공휴일/기념일 연동.",
+      "due": "2026-12-24",
+      "dueLabel": "12/24"
+    },
+    {
+      "id": "cal-xmas",
+      "cat": "upcoming",
+      "icon": "🎅",
+      "title": "크리스마스 (캘린더)",
+      "note": "미국·한국 공휴일 (대부분 매장 휴무).",
+      "due": "2026-12-25",
+      "dueLabel": "12/25"
+    },
+    {
+      "id": "cal-nye",
+      "cat": "upcoming",
+      "icon": "🎆",
+      "title": "섣달 그믐날 (캘린더)",
+      "note": "Google·iPhone 캘린더 연동 일정.",
+      "due": "2026-12-31",
+      "dueLabel": "12/31"
+    },
+    {
+      "id": "cal-newyear",
+      "cat": "upcoming",
+      "icon": "🌅",
+      "title": "새해 첫날 (캘린더)",
+      "note": "2027년 신정 공휴일.",
+      "due": "2027-01-01",
+      "dueLabel": "2027-01-01"
+    },
+    {
+      "id": "cal-return-flight",
+      "cat": "upcoming",
+      "icon": "✈️",
+      "title": "대한항공 귀국편 (KE038)",
+      "note": "포트웨인 출장 종료 및 귀국 일정.",
+      "due": "2027-01-07",
+      "dueLabel": "2027-01-07"
     }
   ],
   "hotel": {
