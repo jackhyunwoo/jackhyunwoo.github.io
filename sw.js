@@ -1,9 +1,15 @@
 /* 업무 현황판 — offline shell */
-const CACHE = "hw-board-v4";
+const CACHE = "hw-board-v5";
 const SHELL = ["./", "./index.html", "./manifest.json", "./icons/icon-180.png", "./icons/icon-192.png", "./icons/icon-512.png"];
 
 self.addEventListener("install", e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()).catch(() => self.skipWaiting()));
+  e.waitUntil(
+    caches.open(CACHE)
+      .then(c => c.addAll(SHELL))
+      .then(() => fetch("./data.json", { cache: "no-store" }).then(r => r.ok ? caches.open(CACHE).then(c => c.put("./data.json", r.clone())) : null).catch(() => null))
+      .then(() => self.skipWaiting())
+      .catch(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener("activate", e => {
@@ -31,14 +37,18 @@ self.addEventListener("fetch", e => {
     return;
   }
 
-  // data.json: network first, fall back to cache
+  // data.json: always network (page adds ?t= and cache:no-store), keep one offline copy
   if (url.pathname.endsWith("/data.json")) {
     e.respondWith(
-      fetch(req).then(res => {
-        const copy = res.clone();
-        caches.open(CACHE).then(c => c.put(req, copy));
+      fetch(req, { cache: "no-store" }).then(res => {
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE).then(c => c.put("./data.json", copy));
+        }
         return res;
-      }).catch(() => caches.match(req).then(r => r || caches.match("./index.html")))
+      }).catch(() =>
+        caches.match("./data.json").then(r => r || new Response('{"error":"offline"}', { status: 503, headers: { "Content-Type": "application/json" } }))
+      )
     );
     return;
   }
