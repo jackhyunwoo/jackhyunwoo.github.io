@@ -2,8 +2,8 @@
   "meta": {
     "title": "업무 현황판",
     "owner": "최현우",
-    "updated": "2026-11-26T12:45:00-05:00",
-    "updatedLabel": "2026-11-26 12:45 EST (가든인 11/26~12/07 11박 확정 · 11/27 인디애나폴리스 블프 당일치기)",
+    "updated": "2026-11-26T20:55:00-05:00",
+    "updatedLabel": "2026-11-26 20:55 EST (무료응모 요약 탭 추가 · NOL DRAW 11/28 13:00 발표)",
     "note": "이 파일만 고치면 화면이 바뀝니다."
   },
   "trip": {
@@ -728,5 +728,169 @@
         "메리어트"
       ]
     }
-  ]
+  ],
+  "giveaways": {
+    "headline": "0원만 골라 응모 — 수집 283건",
+    "note": "마감일은 한국 시간 · 대표 12건만 표시",
+    "total": 283,
+    "stats": [
+      {
+        "v": "283",
+        "k": "수집",
+        "s": "유튜브 9 + 대량 274"
+      },
+      {
+        "v": "2",
+        "k": "실행 중",
+        "s": "유튜브·대량"
+      },
+      {
+        "v": "2",
+        "k": "응모 확정",
+        "s": "NOL·LG"
+      },
+      {
+        "v": "12",
+        "k": "대표 표시",
+        "s": "마감·경품순"
+      }
+    ],
+    "confirmed": [
+      {
+        "icon": "🏨",
+        "title": "야놀자 NOL DRAW — 레스케이프 서울 명동 클래식 킹",
+        "prize": "정가 539,000원 숙박권 · 1명",
+        "when": "11/28 13:00 발표",
+        "note": "0원 응모 완료 · 매일 10:00 새 상품(11/28 에르메스 → 11/29 웨스트윙 조선 → 11/30 피너스 제주)",
+        "url": "https://nol.yanolja.com/raffle-deal/NOLDRAW"
+      },
+      {
+        "icon": "💬",
+        "title": "LG그룹 유튜브 — 신입사원 응원 댓글",
+        "prize": "네이버페이 1만원권 50명",
+        "when": "11/29 마감 · 12/2 발표",
+        "note": "구독·좋아요·댓글 등록 확인",
+        "url": "https://www.youtube.com/watch?v=RzhVIqto_l0"
+      }
+    ],
+    "running": [
+      {
+        "icon": "🎬",
+        "title": "유튜브 9건",
+        "state": "진행 중",
+        "note": "구독·좋아요·댓글 + 폼 3건(한국투자증권·공무원연금공단·원할머니보쌈)"
+      },
+      {
+        "icon": "🎁",
+        "title": "대량 274건",
+        "state": "진행 중",
+        "note": "마감 빠른 순 · 유튜브·웹폼·설문부터, 인스타 로그인 필요한 건 뒤로"
+      }
+    ],
+    "picks": [
+      {
+        "host": "이천시자살예방센터",
+        "prize": "커피 모바일 쿠폰 218명",
+        "end": "11/27",
+        "via": "인스타",
+        "tag": "오늘 마감",
+        "url": "https://www.instagram.com/p/DfQjy1MkoeM/"
+      },
+      {
+        "host": "성평등가족부",
+        "prize": "편의점 3천원권 136명",
+        "end": "11/29",
+        "via": "웹",
+        "tag": "버튼만",
+        "url": "https://stopweek.co.kr/reserve006"
+      },
+      {
+        "host": "안동시",
+        "prize": "네이버페이 1만원권 82명",
+        "end": "11/29",
+        "via": "인스타",
+        "url": "https://www.instagram.com/p/DfYUcD3j19A/"
+      },
+      {
+        "host": "LG전자",
+        "prize": "메가커피 아메리카노 2,026명",
+        "end": "11/30",
+        "via": "웹",
+        "tag": "인원 최다",
+        "url": "https://event.ext.membership.lge.co.kr/korea-grand-festival"
+      },
+      {
+        "host": "국토교통부",
+        "prize": "캐스퍼 전기차·골드바·아이폰·에어랩 등",
+        "end": "11/30",
+        "via": "설문",
+        "tag": "경품 최대",
+        "url": "https://uplus.atsurvey.co.kr/"
+      },
+      {
+        "host": "대한민국 구석구석",
+        "prize": "GS25 2만원권 외 총 2,540명",
+        "end": "11/30",
+        "via": "웹",
+        "url": "https://korean.visitkorea.or.kr/detail/event_detail.do?cotid=949dbe2b-4e89-4ccc-bfe2-2dbb896f1842"
+      },
+      {
+        "host": "소닉 더 헤지혹",
+        "prize": "네이버페이 3만원권 30명",
+        "end": "12/1",
+        "via": "인스타",
+        "url": "https://www.instagram.com/p/Df3faJEAf4V"
+      },
+      {
+        "host": "고양시",
+        "prize": "메가커피 3만원권 60명(총 120명)",
+        "end": "12/4",
+        "via": "유튜브",
+        "url": "https://www.youtube.com/watch?v=6W0xkI-4FVk"
+      },
+      {
+        "host": "연암공과대학교",
+        "prize": "메가커피 아메리카노 180명",
+        "end": "12/6",
+        "via": "인스타",
+        "url": "https://www.instagram.com/p/DflrWFhE1Ql/"
+      },
+      {
+        "host": "한국주택금융공사",
+        "prize": "커피 모바일 기프티콘 160명",
+        "end": "12/6",
+        "via": "인스타",
+        "url": "https://www.instagram.com/p/DfgGfQSgU0t/"
+      },
+      {
+        "host": "유니클로",
+        "prize": "모바일 3만원권 100명",
+        "end": "12/10",
+        "via": "유튜브",
+        "url": "https://www.youtube.com/watch?v=562NZidWkwQ"
+      },
+      {
+        "host": "한국투자증권",
+        "prize": "상품권 총 1,000명(최대 2만원)",
+        "end": "12/11",
+        "via": "유튜브",
+        "tag": "인원 최다",
+        "url": "https://www.youtube.com/watch?v=AJbZE339FpQ"
+      }
+    ],
+    "links": [
+      {
+        "label": "모아득 응모 모음",
+        "url": "https://moadeuk.com/giveaways"
+      },
+      {
+        "label": "이벤트하우스 유튜브 경품",
+        "url": "https://www.eventhouse.kr/site/youtube.php"
+      },
+      {
+        "label": "유벤트",
+        "url": "https://yuvent.co.kr"
+      }
+    ]
+  }
 }
