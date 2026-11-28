@@ -1,5 +1,5 @@
 /* 업무 현황판 — offline shell */
-const CACHE = "hw-board-v6";
+const CACHE = "hw-board-v7";
 const SHELL = ["./", "./index.html", "./manifest.json", "./icons/icon-180.png", "./icons/icon-192.png", "./icons/icon-512.png"];
 
 self.addEventListener("install", e => {
